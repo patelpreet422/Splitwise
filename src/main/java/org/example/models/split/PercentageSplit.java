@@ -1,16 +1,14 @@
 package org.example.models.split;
 
-import org.example.models.split.Split;
-
 public class PercentageSplit extends Split {
-    private double percentage;
+    private final int percentage;
 
-    public PercentageSplit(String userId, double percentage) {
+    public PercentageSplit(String userId, int percentage) {
         this.userId = userId;
         this.percentage = percentage;
     }
 
-    public double getPercentage() {
+    public int getPercentage() {
         return percentage;
     }
 }

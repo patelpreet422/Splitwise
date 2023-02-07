@@ -45,7 +45,7 @@ public class Driver {
 
         splitwiseService.addExpense(new Expense(
                 "expense4",
-                100.,
+                240.,
                 "",
                 Arrays.asList(new ExactSplit("kushal", 80), new ExactSplit("preet", 80), new ExactSplit("bipul", 80)),
                 ExpenseSplitType.EXACT_SPLIT,

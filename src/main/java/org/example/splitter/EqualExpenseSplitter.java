@@ -6,10 +6,9 @@ import org.example.models.split.Split;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EqualExpenseSplitter implements ExpenseSplitter {
+public class EqualExpenseSplitter extends ExpenseSplitter {
     @Override
-    public List<ExactSplit> toExactSplit(List<? extends Split> splits, double totalExpenseAmount) {
-        validateExpenseSplit(splits, totalExpenseAmount);
+    public List<ExactSplit> normalizeToExactSplit(List<? extends Split> splits, double totalExpenseAmount) {
 
         if(splits.size() == 0) {
             return new ArrayList<>();

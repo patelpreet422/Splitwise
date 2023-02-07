@@ -1,16 +1,16 @@
 package org.example.splitter;
 
+import org.example.exceptions.ExpenseSplitValidationException;
 import org.example.models.split.ExactSplit;
 import org.example.models.split.Split;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class ExactExpenseSplitter implements ExpenseSplitter {
+public class ExactExpenseSplitter extends ExpenseSplitter {
     @Override
-    public List<ExactSplit> toExactSplit(List<? extends Split> splits, double totalExpenseAmount) {
-
-        validateExpenseSplit(splits, totalExpenseAmount);
+    public List<ExactSplit> normalizeToExactSplit(List<? extends Split> splits, double totalExpenseAmount) {
 
         List<ExactSplit> exactSplits = new ArrayList<>();
         for(Split split: splits) {
@@ -23,6 +23,18 @@ public class ExactExpenseSplitter implements ExpenseSplitter {
     // TODO: Implement this validation
     @Override
     public void validateExpenseSplit(List<? extends Split> splits, double totalExpenseAmount) {
+        double splitContributionSum = splits.stream()
+                .mapToDouble(split -> ((ExactSplit)split).getAmountShare())
+                .sum();
 
+        if(Math.abs(totalExpenseAmount - splitContributionSum) > 1e-9) {
+            throw new ExpenseSplitValidationException(
+                    "Sum of contribution values in expense split != " + totalExpenseAmount +
+                            ", contribution values found: " + Arrays.toString(splits.stream()
+                            .mapToDouble(split -> ((ExactSplit) split).getAmountShare())
+                            .toArray()),
+                    null
+            );
+        }
     }
 }
