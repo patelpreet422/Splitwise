@@ -6,6 +6,7 @@ import org.example.models.split.ExactSplit;
 import org.example.models.split.Split;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class BalanceSheetService {
@@ -32,6 +33,17 @@ public class BalanceSheetService {
     }
 
     public void recordPayment(String senderId, String receiverId, double amount) {
+        if(Objects.equals(senderId, receiverId)) {
+            BalanceSheet balanceSheet = usersBalanceSheet.getOrDefault(senderId, new BalanceSheet(senderId, new TreeMap<>(), new TreeMap<>()));
+            double previousAmount = balanceSheet.getGivenAmount().getOrDefault(receiverId, 0.);
+
+            balanceSheet.getGivenAmount().put(senderId, amount + previousAmount);
+            balanceSheet.getOwedAmount().put(senderId, amount + previousAmount);
+
+            usersBalanceSheet.put(senderId, balanceSheet);
+            return;
+        }
+
         BalanceSheet senderBalanceSheet = usersBalanceSheet.getOrDefault(senderId, new BalanceSheet(senderId, new TreeMap<>(), new TreeMap<>()));
         BalanceSheet receiverBalanceSheet = usersBalanceSheet.getOrDefault(receiverId, new BalanceSheet(receiverId, new TreeMap<>(), new TreeMap<>()));
 
@@ -54,7 +66,7 @@ public class BalanceSheetService {
         double givenAmount = senderBalanceSheet.getGivenAmount().getOrDefault(receiverId, 0.);
         double owedAmount = senderBalanceSheet.getOwedAmount().getOrDefault(receiverId, 0.);
 
-        double netCashFlow = givenAmount - owedAmount;
+        double netCashFlow = owedAmount - givenAmount;
 
         senderBalanceSheet.getGivenAmount().put(receiverId, 0.);
         senderBalanceSheet.getOwedAmount().put(receiverId, 0.);

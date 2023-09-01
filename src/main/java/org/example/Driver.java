@@ -56,7 +56,9 @@ public class Driver {
         splitwiseService.showBalancesForUser("preet");
 //        splitwiseService.showBalancesForUser("kushal");
 
-        splitwiseService.settlePayment("preet", "kushal");
+        System.out.printf("Amount to be paid by sender: %f\n",
+                splitwiseService.settlePayment("preet", "kushal")
+        );
 
         System.out.println("After settlement between preet and kushal");
 

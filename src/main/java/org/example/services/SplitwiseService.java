@@ -25,7 +25,8 @@ public class SplitwiseService {
     }
 
     public void addExpense(Expense expense) {
-        Expense normalizedExpense = expenseService.addExpense(expense);
+        expenseService.addExpense(expense);
+        Expense normalizedExpense = expenseService.normalizeExpense(expense);
         balanceSheetService.updateBalanceSheet(normalizedExpense);
     }
 
@@ -50,8 +51,8 @@ public class SplitwiseService {
             if(Objects.equals(user, userId)) {
                 continue;
             }
-            double netCashFlow = givenAmount.getOrDefault(user, 0.) -
-                    owedAmount.getOrDefault(user, 0.);
+            double netCashFlow = owedAmount.getOrDefault(user, 0.) -
+                    givenAmount.getOrDefault(user, 0.);
 
             System.out.println(userId + " -> " + user + ": " + netCashFlow);
         }
